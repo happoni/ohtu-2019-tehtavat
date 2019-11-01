@@ -17,3 +17,6 @@ mainClassName = 'ohtuesimerkki.Main'
 run {
     standardInput = System.in
 }
+
+apply plugin: "jacoco"
+
