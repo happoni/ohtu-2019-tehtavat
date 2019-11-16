@@ -8,3 +8,6 @@ arto1;kirjahylly
 arto91113;kirjahylly
 arto64439;kirjahylly
 arto33634;kirjahylly
+jaakko;pallopallo1
+janne;kukkola3
+dille;pallo123

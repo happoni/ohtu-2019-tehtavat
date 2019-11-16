@@ -1,5 +1,6 @@
 package ohtu.authentication;
 
+import static java.lang.Character.isLetter;
 import ohtu.data_access.UserDao;
 import ohtu.domain.User;
 import ohtu.util.CreationStatus;
@@ -33,7 +34,31 @@ public class AuthenticationService {
         if (username.length()<3 ) {
             status.addError("username should have at least 3 characters");
         }
-
+        
+        for (int i = 0; i < username.length(); i++) {
+            if (!isLetter(username.charAt(i))) {
+                status.addError("username should have only letters");
+            }
+        }
+        
+        if (password.length() < 8) {
+            status.addError("password should have at least 8 characters");
+        }
+        
+        boolean passunMerkit = false;
+        for (int j = 0; j < password.length(); j++) {
+            if (!isLetter(password.charAt(j))) {
+                passunMerkit = true;
+            }
+        }
+        if (passunMerkit == false) {
+            status.addError("password should not have only letters");
+        }
+                        
+        if (!password.equals(passwordConfirmation)) {
+            status.addError("password and password confirmation do not match");
+        }
+        
         if (status.isOk()) {
             userDao.add(new User(username, password));
         }
