@@ -102,4 +102,39 @@ public class KauppaTest {
         verify(pankki).tilisiirto(eq(asiakas), anyInt(), eq(tili), anyString(), eq(5));
     }
 
+    @Test
+    public void uusiAsiointiNollaaOstokset() {
+        when(varasto.saldo(1)).thenReturn(10);
+        when(varasto.haeTuote(1)).thenReturn(new Tuote(1, "maito", 5));
+
+        k.aloitaAsiointi();
+        k.lisaaKoriin(1);
+        k.aloitaAsiointi();
+        k.lisaaKoriin(1);
+        k.tilimaksu(asiakas, tili);
+
+        verify(pankki).tilisiirto(eq(asiakas), anyInt(), eq(tili), anyString(), eq(5));
+    }
+
+    @Test
+    public void kauppaPyytaaUudenViitenumeronJokaiselleMaksutapahtumalle() {
+        when(varasto.saldo(1)).thenReturn(10);
+        when(varasto.haeTuote(1)).thenReturn(new Tuote(1, "maito", 5));
+
+        k.aloitaAsiointi();
+        k.lisaaKoriin(1);
+        k.tilimaksu("lasse", "67890");
+        verify(viite, times(1)).uusi();
+        
+        k.aloitaAsiointi();
+        k.lisaaKoriin(1);
+        k.tilimaksu(asiakas, tili);
+        verify(viite, times(2)).uusi();
+    }
+    
+    @Test
+    public void varastoToimii() {
+        
+    }
+
 }
