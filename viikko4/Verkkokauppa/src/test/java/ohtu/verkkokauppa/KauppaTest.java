@@ -143,6 +143,7 @@ public class KauppaTest {
 
         Tuote t1 = v.haeTuote(1);
         Tuote t2 = v.haeTuote(2);
+        
         int saldo = v.saldo(1);
         v.otaVarastosta(t1);
         verify(kp).lisaaTapahtuma(eq("otettiin varastosta " + t1));
