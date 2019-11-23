@@ -13,6 +13,8 @@ public class KauppaTest {
     Kauppa k;
     String asiakas;
     String tili;
+    Varasto v;
+    Kirjanpito kp;
 
     @Before
     public void setUp() {
@@ -22,7 +24,8 @@ public class KauppaTest {
         k = new Kauppa(varasto, pankki, viite);
         asiakas = "pekka";
         tili = "12345";
-
+        kp = mock(Kirjanpito.class);
+        v = new Varasto(kp);
     }
 
     @Test
@@ -125,15 +128,26 @@ public class KauppaTest {
         k.lisaaKoriin(1);
         k.tilimaksu("lasse", "67890");
         verify(viite, times(1)).uusi();
-        
+
         k.aloitaAsiointi();
         k.lisaaKoriin(1);
         k.tilimaksu(asiakas, tili);
         verify(viite, times(2)).uusi();
     }
-    
+
     @Test
     public void varastoToimii() {
+        //Kauppa kauppa = mock(Kauppa.class);
+        //kauppa.aloitaAsiointi();
+        //kauppa.lisaaKoriin(1);
+
+        Tuote t1 = v.haeTuote(1);
+        Tuote t2 = v.haeTuote(2);
+        int saldo = v.saldo(1);
+        v.otaVarastosta(t1);
+        verify(kp).lisaaTapahtuma(eq("otettiin varastosta " + t1));
+        v.palautaVarastoon(t1);
+        verify(kp).lisaaTapahtuma(eq("palautettiin varastoon " + t1));
         
     }
 
