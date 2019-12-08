@@ -12,33 +12,16 @@ public class Main {
 
         Statistics stats = new Statistics(new PlayerReaderImpl(url));
 
-//        Matcher m = new And( new HasAtLeast(5, "goals"),
-//                             new HasAtLeast(5, "assists"),
-//                             new PlaysIn("PHI")
-//        );
-//        Matcher m = new And(
-//                new Not(new HasAtLeast(1, "goals")),
-//                new PlaysIn("NYR")
-//        );
-//        Matcher m = new And(
-//                new HasFewerThan(1, "goals"),
-//                new PlaysIn("NYR")
-//        );
-//
-//        Matcher m = new Or(new HasAtLeast(20, "goals"),
-//                new HasAtLeast(20, "assists")
-//        );
-        Matcher m = new And(
-                new HasAtLeast(20, "points"),
-                new Or(
-                        new PlaysIn("NYR"),
-                        new PlaysIn("NYI"),
-                        new PlaysIn("NJD")
-                )
-        );
+        QueryBuilder query = new QueryBuilder();
+//        Matcher m = query.build();
+//        Matcher m = query.playsIn("NYR").build();
+        Matcher m = query.playsIn("NYR")
+                .hasAtLeast(5, "goals")
+                .hasFewerThan(10, "goals").build();
 
         for (Player player : stats.matches(m)) {
             System.out.println(player);
         }
     }
+
 }
