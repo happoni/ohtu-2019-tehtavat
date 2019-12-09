@@ -3,46 +3,40 @@ package statistics.matcher;
 public class QueryBuilder {
 
     Matcher matcher;
-    All all;
-    PlaysIn playsIn;
-    QueryBuilder query;
-    
+
     public QueryBuilder() {
-        this.matcher = new And();
-        this.query = new QueryBuilder();
-    }
-        
-    public QueryBuilder(Matcher matcher) {
-        this.matcher = new And(matcher);
-    }
-//    
-//    public QueryBuilder(PlaysIn playsIn) {
-//        this.matcher = new And(playsIn);
-//    }
-//
-//    public QueryBuilder(HasAtLeast hasAtLeast) {
-//        this.matcher = new And(hasAtLeast);
-//    }
-//    
-//    public QueryBuilder(HasFewerThan hasFewerThan) {
-//        this.matcher = new And(hasFewerThan);
-//    }
-//    
-    public Matcher build() {
-        return this.matcher;
+        this.matcher = new All();
     }
 
-    public QueryBuilder playsIn(String nyr) {
-        this.query = new QueryBuilder(new PlaysIn(nyr));
-        return this.query;        
+    public QueryBuilder playsIn(String team) {
+        this.matcher = new And(this.matcher, new PlaysIn(team));
+        return this;
     }
 
     public QueryBuilder hasAtLeast(int i, String goals) {
-        return new QueryBuilder(new HasAtLeast(i, goals));
+        this.matcher = new And(this.matcher, new HasAtLeast(i, goals));
+        return this;
     }
 
     public QueryBuilder hasFewerThan(int i, String goals) {
-        return new QueryBuilder(new HasFewerThan(i, goals));
+        this.matcher = new And(this.matcher, new HasFewerThan(i, goals));
+        return this;
+    }
+
+    public QueryBuilder or(Matcher... matcher) {
+        this.matcher = new And(this.matcher, new Or(matcher));
+        return this;
+    }
+
+    public QueryBuilder oneOf(Matcher... matchers) {
+        this.matcher = new And(this.matcher, new Or(matchers));
+        return this;
+    }
+
+    public Matcher build() {
+        Matcher m = this.matcher;
+        this.matcher = new All();
+        return m;
     }
 
 }
